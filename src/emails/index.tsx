@@ -41,7 +41,10 @@ export default function MotortrendNewsletterEmailTemplate({ name }: WelcomeEmail
                             Motortrend
                         </Heading>
                         <Heading as="h3">
-                            { name } Rolling With The Trends
+                           Welcome { name }!
+                        </Heading>
+                        <Heading>
+                            Rolling With The Trends
                         </Heading>
                     </Section>
                     <Section>
