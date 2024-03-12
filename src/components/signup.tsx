@@ -51,6 +51,7 @@ const MyForm: React.FC = () => {
     const openai = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY
     });
+    const { articleTitle } = articles[0];
   
     try {
       const generatedHeadline = await openai.chat.completions.create({
@@ -62,24 +63,25 @@ const MyForm: React.FC = () => {
           },
           {
             "role": "user",
-            "content": articles[0].articleTitle
+            "content": articleTitle
+
           }
         ],
         temperature: 0.8,
-        max_tokens: 20,
+        max_tokens: 30,
         top_p: 1,
       });
 
-      const headline = generatedHeadline.choices[0].message.content;
+      const { choices: [{ message: { content } }] } = generatedHeadline;
 
-      setFormData((prevData) => ({ ...prevData, headline: headline }));
+      setFormData((prevData) => ({ ...prevData, headline: content }));
   
       const response = await fetch('/api/emails', {
         method: 'POST',
         body: JSON.stringify({
           name: formData.name,
           email: formData.email,
-          headline: headline,
+          headline: content,
         }),
         headers: {
           'Content-Type': 'application/json',
