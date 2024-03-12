@@ -1,3 +1,5 @@
+// "use client";
+
 import {
     Body,
     Container,
@@ -25,11 +27,15 @@ const imageUrls = [
 
 interface WelcomeEmailProps {
     name: string;
-  }
-  
-  
+    headline: string;
+}
+   
 
-export default function MotortrendNewsletterEmailTemplate({ name }: WelcomeEmailProps) {
+export default function MotortrendNewsletterEmailTemplate({
+    name,
+    headline
+}: WelcomeEmailProps) {
+
 
     return (
         <Html>
@@ -41,10 +47,10 @@ export default function MotortrendNewsletterEmailTemplate({ name }: WelcomeEmail
                             Motortrend
                         </Heading>
                         <Heading as="h3">
-                           Welcome { name }!
+                           Welcome {name}!
                         </Heading>
                         <Heading>
-                            Rolling With The Trends
+                            {headline}
                         </Heading>
                     </Section>
                     <Section>

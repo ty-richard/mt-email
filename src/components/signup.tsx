@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import OpenAI from "openai";
 
 interface FormData {
   name: string;
@@ -10,8 +11,35 @@ interface FormData {
 const MyForm: React.FC = () => {
   const [formData, setFormData] = useState<FormData>({ name: '', email: '' });
   const [state, setState] = useState<string>();
+  const [articles, setArticles] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchArticles = async () => {
+      try {
+        const response = await fetch('https://cors-anywhere.herokuapp.com/https://mt-lite-api.vercel.app/api/articles');
+        if (!response.ok) {
+          console.error('Error fetching articles:', response.statusText);
+          return;
+        }
+        const data = await response.json();
+        const articleData = data.data;
+        const randomArticles = getRandomArticles(articleData, 6);
+        setArticles(randomArticles);
+      } catch (error) {
+        console.error('An error occurred while fetching articles:', error);
+      }
+    };
+
+    fetchArticles();
+  }, []);
+
+  const getRandomArticles = (allArticles: string[], count: number): string[] => {
+    const shuffledArticles = allArticles.slice().sort(() => 0.5 - Math.random());
+    return shuffledArticles.slice(0, count);
+  };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    console.log("TITLE::::", articles[0].articleTitle)
     const { name, value } = event.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
@@ -19,29 +47,52 @@ const MyForm: React.FC = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();
     setState('loading');
+
+    const openai = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY
+    });
   
     try {
+      const generatedHeadline = await openai.chat.completions.create({
+        model: "gpt-3.5-turbo",
+        messages: [
+          {
+            "role": "system",
+            "content": "You will be provided with an article title, and your task is to generate attention grabbing headline from title."
+          },
+          {
+            "role": "user",
+            "content": articles[0].articleTitle
+          }
+        ],
+        temperature: 0.8,
+        max_tokens: 20,
+        top_p: 1,
+      });
+
+      const headline = generatedHeadline.choices[0].message.content;
+
+      setFormData((prevData) => ({ ...prevData, headline: headline }));
+  
       const response = await fetch('/api/emails', {
         method: 'POST',
         body: JSON.stringify({
-          firstName: formData.name,
-          email: formData.email
+          name: formData.name,
+          email: formData.email,
+          headline: headline,
         }),
         headers: {
-          'Content-Type': 'application/json'
-        }
+          'Content-Type': 'application/json',
+        },
       });
   
       if (!response.ok) {
-        // Handle the error based on your requirements
         console.error('Error submitting the form:', response.statusText);
         return;
       }
   
-      // If successful, you can proceed with your logic here
       console.log('Form submitted successfully:', formData);
     } catch (error) {
-      // Handle any other errors that might occur during the fetch
       console.error('An error occurred while submitting the form:', error);
     } finally {
       setState('ready');
