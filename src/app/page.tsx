@@ -1,13 +1,7 @@
 import React from 'react';
 import SignupForm from '../components/signup';
-// import { fetchTitlesFromAPI } from '../app/api/articles';
 
 const IndexPage: React.FC = () => {
-  // const handleFormSubmit = async () => {
-  //   // Call the function that fetches titles
-  //   const titles = await fetchTitlesFromAPI();
-  //   return titles;
-  // };
 
   return (
     <section className="container grid h-full items-center gap-6 pb-8 pt-6 md:py-10">

@@ -33,14 +33,14 @@ export default function MotortrendNewsletterEmailTemplate({
             <Preview>Motortrend</Preview>
             <Body style={main}>
                 <Container style={container}>
-                    <Section>
-                        <Heading as="h1">
+                    <Section style={heading}>
+                        <Heading as="h1"  style={{ textAlign: "center" }}>
                             Motortrend
                         </Heading>
-                        <Heading as="h3">
+                        <Heading as="h3" style={{ textAlign: "center" }}>
                            Welcome {name}!
                         </Heading>
-                        <Heading>
+                        <Heading as="h2" style={{ textAlign: "center" }}>
                             {headline}
                         </Heading>
                     </Section>
@@ -58,7 +58,7 @@ export default function MotortrendNewsletterEmailTemplate({
                     </Section>
                     <Section style={paragraphList}>
                         <Text style={paragraph}>
-                        Come visit us at the Motortrend Group to see the latest news and
+                            Come visit us at the Motortrend Group to see the latest news and
                             updates.
                         <Link href="https://www.motortrend.com/" style={link}>
                             See more
@@ -87,20 +87,10 @@ export default function MotortrendNewsletterEmailTemplate({
         
                     <Section style={containerContact}>
                         <Row>
-                            <Text style={paragraph}>Connect with us</Text>
-                        </Row>
-                        <Row
-                        align="left"
-                        style={{
-                            width: "84px",
-                            float: "left",
-                        }}
-                        >
-                            <Column style={{ paddingRight: "4px", width: "84px" }}>
-                                <Link href="https://www.motortrend.com/">
+                            <Text style={{ ...paragraph }}>Connect with us</Text>
+                            <Link href="https://www.motortrend.com/"  style={{ paddingBottom: 20 }}>
                                     Here at Motortrend!!
-                                </Link>
-                            </Column>
+                            </Link>
                         </Row>
                     </Section>
                     <Section style={{ ...paragraphContent, paddingBottom: 30 }}>
@@ -132,7 +122,7 @@ const container = {
     margin: "30px auto",
     backgroundColor: "#fff",
     borderRadius: 5,
-    overflow: "hidden",
+    overflow: "hidden"
 };
   
 const containerContact = {
@@ -144,25 +134,9 @@ const containerContact = {
 };
   
 const heading = {
-    fontSize: "30px",
-    lineHeight: "26px",
-    fontWeight: "700",
-    textAlign: "center",
+    lineHeight: "1.3",
+    fontWeight: "700"
 };
-
-const centeredHeading = {
-    ...heading,
-    textAlign: "center",
-};
-
-const centeredSubHeading = {
-    fontSize: "18px",
-    // lineHeight: "26px",
-    fontWeight: "700",
-    color: "#3c4043",
-    textAlign: "center",
-};
-  
   
 const paragraphContent = {
     padding: "0 40px",
@@ -186,8 +160,4 @@ const link = {
 const hr = {
     borderColor: "#e8eaed",
     margin: "20px 0",
-};
-  
-const footer = {
-    maxWidth: "100%",
 };

@@ -107,9 +107,9 @@ const MyForm: React.FC = () => {
   
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px' }}>
       <form onSubmit={handleSubmit}>
-        <label>
+        <label style={{ marginBottom: '10px' }}>
           Name:
           <input
             type="text"
@@ -117,9 +117,10 @@ const MyForm: React.FC = () => {
             value={formData.name}
             onChange={handleChange}
             required
+            style={{ width: '100%', padding: '10px', marginBottom: '10px' }}
           />
         </label>
-        <label>
+        <label style={{ marginBottom: '10px' }}>
           Email:
           <input
             type="email"
@@ -127,9 +128,10 @@ const MyForm: React.FC = () => {
             value={formData.email}
             onChange={handleChange}
             required
+            style={{ width: '100%', padding: '10px', marginBottom: '20px' }}
           />
         </label>
-        <button type="submit" disabled={state === 'loading'}>Submit</button>
+        <button type="submit" disabled={state === 'loading'} style={{ width: '100%', padding: '10px', backgroundColor: '#007bff', color: '#fff', border: 'none', cursor: 'pointer' }}>Submit</button>
       </form>
     </div>
   );
