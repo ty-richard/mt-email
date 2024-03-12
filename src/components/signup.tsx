@@ -49,7 +49,8 @@ const MyForm: React.FC = () => {
     setState('loading');
 
     const openai = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY
+      apiKey: process.env.OPENAI_API_KEY,
+      dangerouslyAllowBrowser: true
     });
     const { articleTitle } = articles[0];
   
