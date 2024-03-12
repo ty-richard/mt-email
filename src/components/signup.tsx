@@ -74,7 +74,9 @@ const MyForm: React.FC = () => {
 
       const { choices: [{ message: { content } }] } = generatedHeadline;
 
-      setFormData((prevData) => ({ ...prevData, headline: content }));
+      const imageUrls = articles.map((article) => article.articleFeaturedImage);
+
+      setFormData((prevData) => ({ ...prevData, headline: content, imageUrls: imageUrls }));
   
       const response = await fetch('/api/emails', {
         method: 'POST',
@@ -82,6 +84,7 @@ const MyForm: React.FC = () => {
           name: formData.name,
           email: formData.email,
           headline: content,
+          imageUrls: imageUrls,
         }),
         headers: {
           'Content-Type': 'application/json',

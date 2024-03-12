@@ -1,5 +1,3 @@
-// "use client";
-
 import {
     Body,
     Container,
@@ -16,24 +14,17 @@ import {
 } from "@react-email/components";
 import React from 'react';
 
-const imageUrls = [
-    'https://www.motortrend.com/uploads/2024/02/001-C6-Corvette-Vette-History-2005-2013.jpg',
-    'https://d2kde5ohu8qb21.cloudfront.net/files/65eb5c8e37a05b000876e38b/0041-porsche-cayman-vs-bmw-m2-thumbnail-1920x1080.jpg',
-    'https://www.motortrend.com/uploads/sites/5/2018/04/Vision-Mercedes-Maybach-Ultimate-Luxury-9.jpg',
-    'https://www.motortrend.com/uploads/2024/02/2024-Toyota-Land-Cruiser-2-door-render.jpg',
-    'https://www.motortrend.com/uploads/2024/02/2024-Maserati-GranCabrio-Trofeo-reveal-11.jpg',
-    'https://www.motortrend.com/uploads/2024/02/001-2024-Toyota-Crown-Limited-Front-Three-Quarter-LEAD.jpg'
-];
-
 interface WelcomeEmailProps {
     name: string;
     headline: string;
+    imageUrls: any[];
 }
    
 
 export default function MotortrendNewsletterEmailTemplate({
     name,
-    headline
+    headline,
+    imageUrls
 }: WelcomeEmailProps) {
 
 
