@@ -76,6 +76,7 @@ const MyForm: React.FC = () => {
       const { choices: [{ message: { content } }] } = generatedHeadline;
 
       const imageUrls = articles.map((article) => article.articleFeaturedImage);
+      const articleUrls = articles.map((article) => article.articlePath);
 
       setFormData((prevData) => ({ ...prevData, headline: content, imageUrls: imageUrls }));
   
