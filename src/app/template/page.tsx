@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { Container } from "@react-email/container"; 
 import { Hr } from "@react-email/hr";
@@ -9,16 +9,38 @@ import { Preview } from "@react-email/preview";
 import { Row } from "@react-email/row";
 import { Section } from "@react-email/section";
 import { Text } from "@react-email/text";
-import React, { useState, useEffect } from 'react';
+import { MOTORTREND_URL, MOTORTREND_STORE_URL } from "../../utils/constants";
+import React, { useState, useEffect } from "react";
 import OpenAI from "openai";
    
 export default function TemplatePage() {
-    const [setState] = useState<string>();
+    const [state, setState] = useState<string>();
     const [articles, setArticles] = useState<any[]>([]);
+    // const [trending, setTrending] = useState<any[]>([]);
     const [headline, setHeadline] = useState<string>("Welcome to Motortrend!");
     const [imageUrls, setImageUrls] = useState<string[]>([]);
     const [articleUrls, setArticleUrls] = useState<string[]>([]);
-    const name = "Ty";
+    const [articleTitles, setArticleTitles] = useState<string[]>([]);
+    const [articleDescriptions, setArticleDescriptions] = useState<string[]>([]);
+
+    // useEffect(() => {
+    //     const fetchTrending = async () => {
+    //         try {
+    //             const response = await fetch('https://os-interactions.stg.motortrend.com');
+    //             if (!response.ok) {
+    //                 console.error('Error fetching trending:', response.statusText);
+    //                 return;
+    //             }
+    //             const data = await response.json();
+    //             const trendingData = data.data;
+    //             setArticles(trendingData);
+    //         } catch (error) {
+    //             console.error('An error occurred while fetching trending:', error);
+    //         }
+    //     };
+
+    //     fetchTrending();
+    // }, []);
 
     useEffect(() => {
         const fetchArticles = async () => {
@@ -53,7 +75,7 @@ export default function TemplatePage() {
 
     const headlineGenerator = async () => {
         const openai = new OpenAI({
-            apiKey: process.env.OPENAI_API_KEY,
+            apiKey: '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',
             dangerouslyAllowBrowser: true
         });
         const { articleTitle } = articles[0];
@@ -83,6 +105,10 @@ export default function TemplatePage() {
             setImageUrls(urls);
             const articleUrls = articles.map((article) => article.articlePath);
             setArticleUrls(articleUrls);
+            const articleTitles = articles.map((article) => article.articleTitle);
+            setArticleTitles(articleTitles);
+            const articleDescriptions = articles.map((article) => article.articleMetaDescription);
+            setArticleDescriptions(articleDescriptions);
         } catch (error) {
             console.error('An error occurred while submitting the form:', error);
         } finally {
@@ -91,28 +117,52 @@ export default function TemplatePage() {
     };
 
     return (
-        <Container className="mx-auto max-w-3xl bg-gray-100 p-4">
+        <Container className="mx-auto max-w-3xl bg-gray-200 p-4">
             <Preview>Motortrend</Preview>
             <Section className="text-center">
                 <Heading as="h1" className="text-3xl text-black font-bold mb-2">
-                    Motortrend
-                </Heading>
-                <Heading as="h3" className="text-xl text-black font-bold mb-2">
-                    Welcome {name}!
+                    Motortrend 75
                 </Heading>
                 <Heading as="h2" className="text-2xl text-black font-bold mb-4">
                     {headline}
                 </Heading>
+                <Row className="my-7 text-black">
+                    <Link href={`${MOTORTREND_URL}auto-news`} className="text-black mx-8 hover:underline">News</Link>
+                    <Link href={`${MOTORTREND_URL}car-reviews`} className="text-black mx-8 hover:underline">Reviews</Link>
+                    <Link href={`${MOTORTREND_URL}cars`} className="text-black mx-8 hover:underline">Find a Car</Link>
+                    <Link href={`${MOTORTREND_URL}plus/`} className="text-black mx-8 hover:underline">Watch</Link>
+                    <Link href={MOTORTREND_STORE_URL} className="text-black mx-8 hover:underline">Merch</Link>
+                </Row>
             </Section>
-            <Section>
+            <Hr className="my-4 bg-gray-800" />
+            <Section className="flex flex-wrap justify-center">
                 {imageUrls.map((image, index) => (
-                    <a key={index} href={`https://www.motortrend.com/${articleUrls[index]}`} target="_blank" rel="noopener noreferrer">
-                        <Img
-                            src={image}
-                            alt={`Image ${index + 1}`}
-                            className="w-full h-auto mb-4"
-                        />
-                    </a>
+                    <div key={index} className="h-full w-full flex items-center mb-4">
+                        <a href={`${MOTORTREND_URL}${articleUrls[index]}`} className="w-full md:w-5/6" target="_blank" rel="noopener noreferrer">
+                            <Img
+                                src={image}
+                                alt={`Image ${index + 1}`}
+                                className="h-auto w-auto object-cover rounded-lg"
+                            />
+                        </a>
+                        
+                        <div className="ml-4 h-full flex flex-col justify-center">
+                            <Heading as="h4" className="text-xl text-black font-bold mb-4">
+                                {articleTitles[index]}
+                            </Heading>
+                            <p className="text-base text-black">
+                                {articleDescriptions[index] && articleDescriptions[index].length > 50 ? articleDescriptions[index].substring(0, 50) + "..." : articleDescriptions[index]}
+                                {articleDescriptions[index] && articleDescriptions[index].length > 50 ? (
+                                    <span>
+                                        <br />
+                                        <a href={`${MOTORTREND_URL}${articleUrls[index]}`} target="_blank" rel="noopener noreferrer" className="text-black hover:underline">READ MORE</a>
+                                    </span>
+                                ) : (
+                                    <span className="text-base text-black">READ MORE</span>
+                                )}
+                            </p>
+                        </div>
+                    </div>
                 ))}
             </Section>
             <Section className="px-4">
@@ -120,7 +170,7 @@ export default function TemplatePage() {
                     Come visit us at the Motortrend Group to see the latest news and
                     updates.{' '}
                     <Link
-                        href="https://www.motortrend.com/"
+                        href={`${MOTORTREND_URL}`}
                         className="text-blue-500 hover:underline"
                     >
                         See more
@@ -150,7 +200,7 @@ export default function TemplatePage() {
                 <Row className="mb-4">
                     <Text className="text-base text-black">Connect with us</Text>
                     <Link
-                        href="https://www.motortrend.com/"
+                        href={`${MOTORTREND_URL}`}
                         className="text-blue-500 hover:underline"
                     >
                         Here at Motortrend!!

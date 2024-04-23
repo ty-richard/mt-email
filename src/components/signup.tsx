@@ -15,27 +15,33 @@ const MyForm: React.FC = () => {
 
   useEffect(() => {
     const fetchArticles = async () => {
-      try {
-        const response = await fetch('https://cors-anywhere.herokuapp.com/https://mt-lite-api.vercel.app/api/articles');
-        if (!response.ok) {
-          console.error('Error fetching articles:', response.statusText);
-          return;
+        try {
+            const response = await fetch('https://cors-anywhere.herokuapp.com/https://mt-lite-api.vercel.app/api/articles');
+            if (!response.ok) {
+                console.error('Error fetching articles:', response.statusText);
+                return;
+            }
+            const data = await response.json();
+            const articleData = data.data;
+            const randomArticles = getRandomArticles(articleData, 6);
+            setArticles(randomArticles);
+        } catch (error) {
+            console.error('An error occurred while fetching articles:', error);
         }
-        const data = await response.json();
-        const articleData = data.data;
-        const randomArticles = getRandomArticles(articleData, 6);
-        setArticles(randomArticles);
-      } catch (error) {
-        console.error('An error occurred while fetching articles:', error);
-      }
     };
 
     fetchArticles();
   }, []);
 
+  // useEffect(() => {
+  //   if (articles.length > 0) {
+  //       headlineGenerator();
+  //   }
+  // }, [articles]);
+
   const getRandomArticles = (allArticles: string[], count: number): string[] => {
-    const shuffledArticles = allArticles.slice().sort(() => 0.5 - Math.random());
-    return shuffledArticles.slice(0, count);
+      const shuffledArticles = allArticles.slice().sort(() => 0.5 - Math.random());
+      return shuffledArticles.slice(0, count);
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
@@ -71,14 +77,16 @@ const MyForm: React.FC = () => {
         temperature: 0.8,
         max_tokens: 30,
         top_p: 1,
-      });
+    });
 
       const { choices: [{ message: { content } }] } = generatedHeadline;
 
       const imageUrls = articles.map((article) => article.articleFeaturedImage);
       const articleUrls = articles.map((article) => article.articlePath);
+      const articleTitles = articles.map((article) => article.articleTitle);
+      const articleDescriptions = articles.map((article) => article.articleMetaDescription);
 
-      setFormData((prevData) => ({ ...prevData, headline: content, imageUrls: imageUrls }));
+      setFormData((prevData) => ({ ...prevData, headline: content, imageUrls: imageUrls, articleUrls: articleUrls, articleTitles: articleTitles, articleDescriptions: articleDescriptions }));
   
       const response = await fetch('/api/emails', {
         method: 'POST',
@@ -87,6 +95,9 @@ const MyForm: React.FC = () => {
           email: formData.email,
           headline: content,
           imageUrls: imageUrls,
+          articleUrls: articleUrls,
+          articleTitles: articleTitles,
+          articleDescriptions: articleDescriptions
         }),
         headers: {
           'Content-Type': 'application/json',

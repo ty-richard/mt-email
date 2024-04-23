@@ -5,7 +5,7 @@ import MotortrendNewsletterEmailTemplate from '../../../emails/index';
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(request: Request) {
-  const { name, email, headline, imageUrls } = await request.json();
+  const { name, email, headline, imageUrls, articleUrls, articleTitles, articleDescriptions } = await request.json();
 
     try {
         await resend.emails.send({
@@ -15,7 +15,10 @@ export async function POST(request: Request) {
             react: MotortrendNewsletterEmailTemplate({
                 name,
                 headline,
-                imageUrls
+                imageUrls,
+                articleUrls,
+                articleTitles,
+                articleDescriptions
             })
         });
     
