@@ -109,6 +109,7 @@ export default function TemplatePage() {
             setArticleTitles(articleTitles);
             const articleDescriptions = articles.map((article) => article.articleMetaDescription);
             setArticleDescriptions(articleDescriptions);
+            console.log("update commits")
         } catch (error) {
             console.error('An error occurred while submitting the form:', error);
         } finally {
