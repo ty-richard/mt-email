@@ -75,7 +75,7 @@ export default function TemplatePage() {
 
     const headlineGenerator = async () => {
         const openai = new OpenAI({
-            apiKey: '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',
+            apiKey: process.env.OPENAI_API_KEY,
             dangerouslyAllowBrowser: true
         });
         const { articleTitle } = articles[0];
